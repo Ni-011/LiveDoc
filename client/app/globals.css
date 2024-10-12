@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f3f3f3;
+}
+
+/* sizing the editor */
+.container .ql-container .ql-editor {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 1in;
+  margin: 1rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+
+/* centering the container */
+.container .ql-container.ql-snow {
+  border: none;
+  display: flex;
+  justify-content: center;
+}
+
+.container .ql-toolbar.ql-snow {
+  display: flex;
+  border: none;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f3f3f3;
+}
+
+/* fixing print size */
+@media print {
+  body {
+    background: none;
+  }
+
+  /* reducing the margin space, shadow */
+  .container .ql-editor {
+    width: 6.5in;
+    height: 9in;
+    padding: 0;
+    box-shadow: none;
+    align-self: flex-start;
+  }
+
+  /* hiding the top toolbar while printing */
+  .container .ql-toolbar.ql-snow {
+    display: none;
+  }
+}
