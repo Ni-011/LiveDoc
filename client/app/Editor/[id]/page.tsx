@@ -18,7 +18,7 @@ const ToolBarOptions = [
   ["cleans"],
 ];
 
-const page = () => {
+const Editor = () => {
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
 
@@ -33,17 +33,19 @@ const page = () => {
 
   useEffect(() => {
     if (socket == null || quill == null) return;
+    console.log("socket working");
     // sending changes to server
     const sendChanges = (delta: any, oldDelta: any, source: any) => {
       if (source != "user") return; // only user changes will be sent
       socket.emit("send-change", delta);
+    };
 
-      quill.on("text-change", sendChanges);
+    quill.on("text-change", sendChanges);
+    console.log("sending data failed");
 
-      // closing the socket
-      return () => {
-        quill.off("text-change", sendChanges);
-      };
+    // closing the socket
+    return () => {
+      quill.off("text-change", sendChanges);
     };
   }, [socket, quill]);
 
@@ -78,4 +80,4 @@ const page = () => {
   return <div className="container" ref={quillRef}></div>; // container div reffering to quillref
 };
 
-export default page;
+export default Editor;
