@@ -12,9 +12,15 @@ const io = new Server(http, {
 app.use(cors());
 
 io.on("connection", (Socket) => {
-  Socket.on("send-change", (delta) => {
-    Socket.broadcast.emit("recieve-change", delta); // sends the data it recieves back to all devices
+  Socket.on("get-doc", (documentId) => {
+    const data = "";
+    Socket.join(documentId);
+    Socket.emit("open-doc", data);
+    Socket.on("send-change", (delta) => {
+      Socket.broadcast.to(documentId).emit("recieve-change", delta); // sends the data it recieves back to all devices
+    });
   });
+
   console.log("connected");
 });
 
