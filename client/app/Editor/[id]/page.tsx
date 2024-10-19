@@ -42,6 +42,18 @@ const Editor = ({ params }: { params: { id: string } }) => {
     socket.emit("get-doc", documentId); // sends the id to backend
   }, [socket, quill, documentId]);
 
+  useEffect(() => {
+    if (socket == null || quill == null) return;
+
+    const interval = setInterval(() => {
+      socket.emit("save-doc", quill.getContents());
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [socket, quill]);
+
   // detecting changes
   useEffect(() => {
     if (socket == null || quill == null) return;
