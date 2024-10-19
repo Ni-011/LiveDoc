@@ -5,15 +5,17 @@ import { createServer } from "http";
 import cors from "cors";
 import Document from "./Document";
 
-mongoose.connect(
-  "mongodb+srv://nitinrana01125532553:bvIPtpJpzlZY4lS3@cluster0.hrxfg.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  } as ConnectOptions
-);
+try {
+  mongoose.connect(
+    "mongodb+srv://nitinrana01125532553:bvIPtpJpzlZY4lS3@cluster0.hrxfg.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as ConnectOptions
+  );
+} catch (error) {
+  console.log(error);
+}
 
 const defaultData = "";
 
@@ -35,7 +37,7 @@ io.on("connection", (Socket) => {
       // real time changes between different devices having same doc
       Socket.broadcast.to(documentId).emit("recieve-change", delta); // sends the data it recieves back to all devices
     });
-    Socket.on("save-dc", async (data) => {
+    Socket.on("save-doc", async (data) => {
       await Document.findByIdAndUpdate(documentId, { data });
     });
   });
@@ -54,5 +56,5 @@ const findOrCreateDocument = async (id: string) => {
   const document = await Document.findById(id);
   if (document) return document;
 
-  return await Document.create({ id: id, data: defaultData });
+  return await Document.create({ _id: id, data: defaultData });
 };
